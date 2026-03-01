@@ -1,0 +1,237 @@
+{
+    "channels": {
+        "whatsapp": {
+            "enabled": false,
+            "bridgeUrl": "ws://localhost:3001",
+            "allowFrom": []
+        },
+        "telegram": {
+            "enabled": false,
+            "token": "YOUR_TELEGRAM_BOT_TOKEN",
+            "allowFrom": [],
+            "proxy": null
+        },
+        "discord": {
+            "enabled": false,
+            "token": "YOUR_DISCORD_BOT_TOKEN",
+            "allowFrom": [],
+            "gatewayUrl": "wss://gateway.discord.gg/?v=10&encoding=json",
+            "intents": 37377
+        },
+        "feishu": {
+            "enabled": false,
+            "appId": "YOUR_FEISHU_APP_ID",
+            "appSecret": "YOUR_FEISHU_APP_SECRET",
+            "encryptKey": "YOUR_FEISHU_ENCRYPT_KEY",
+            "verificationToken": "YOUR_FEISHU_VERIFICATION_TOKEN",
+            "allowFrom": []
+        },
+        "slack": {
+            "enabled": false,
+            "token": "YOUR_SLACK_BOT_TOKEN",
+            "signing_secret": "YOUR_SLACK_SIGNING_SECRET",
+            "allow_from": [],
+            "port": 8080,
+            "typing_indicator": false,
+            "typing_emoji": "eyes",
+            "channel_routing": {
+                "enabled": true,
+                "notification_channel": "YOUR_NOTIFICATION_CHANNEL_ID",
+                "log_channel": "YOUR_LOG_CHANNEL_ID",
+                "_note": "Set via env var NYANCOBOT_NOTIFICATION_CHANNEL or channel name lookup"
+            }
+        }
+    },
+    "providers": {
+        "fallback_order": [
+            "vllm"
+        ],
+        "retry": {
+            "max_attempts": 4,
+            "backoff_seconds": 10
+        },
+        "anthropic": {
+            "apiKey": "YOUR_ANTHROPIC_API_KEY",
+            "apiBase": null,
+            "extraHeaders": null
+        },
+        "openai": {
+            "apiKey": "YOUR_OPENAI_API_KEY",
+            "apiBase": null,
+            "extraHeaders": null
+        },
+        "vllm": {
+            "apiKey": "ollama",
+            "apiBase": "http://127.0.0.1:11434/v1",
+            "extraHeaders": null,
+            "_note": "Ollama local LLM (configure your model name)"
+        },
+        "openrouter": {
+            "apiKey": "YOUR_OPENROUTER_API_KEY",
+            "apiBase": null,
+            "extraHeaders": null
+        },
+        "deepseek": {
+            "apiKey": "YOUR_DEEPSEEK_API_KEY",
+            "apiBase": null,
+            "extraHeaders": null
+        },
+        "groq": {
+            "apiKey": "YOUR_GROQ_API_KEY",
+            "apiBase": null,
+            "extraHeaders": null
+        },
+        "gemini": {
+            "apiKey": "YOUR_GEMINI_API_KEY",
+            "apiBase": null,
+            "extraHeaders": null
+        }
+    },
+    "cron": {
+        "heartbeat": {
+            "enabled": false,
+            "interval_minutes": 30,
+            "prompt": "Send a heartbeat message.",
+            "skip_if_busy": true
+        }
+    },
+    "gateway": {
+        "host": "127.0.0.1",
+        "port": 8080
+    },
+    "tools": {
+        "web": {
+            "search": {
+                "apiKey": "YOUR_SEARCH_API_KEY",
+                "maxResults": 5
+            }
+        },
+        "exec": {
+            "timeout": 120,
+            "audit_log": true,
+            "audit_log_path": "~/.nyancobot/logs/audit.jsonl"
+        },
+        "restrictToWorkspace": true,
+        "allowed_dirs": [
+            "~/.nyancobot/workspace",
+            "/tmp"
+        ],
+        "policy": {
+            "mode": "denylist",
+            "denylist": [
+                "spawn",
+                "env",
+                "printenv",
+                "set",
+                "export"
+            ],
+            "groups": {
+                "fs": [
+                    "read_file",
+                    "write_file",
+                    "edit_file",
+                    "list_dir"
+                ],
+                "web": [
+                    "web_search",
+                    "web_fetch"
+                ],
+                "comm": [
+                    "message",
+                    "spawn"
+                ]
+            }
+        }
+    },
+    "agents": {
+        "defaults": {
+            "workspace": "~/.nyancobot/workspace",
+            "model": "YOUR_DEFAULT_MODEL",
+            "maxTokens": 8192,
+            "temperature": 0.7,
+            "maxToolIterations": 20
+        },
+        "sanitize": {
+            "enabled": true,
+            "tag_external": true,
+            "detect_injection": true,
+            "url_denylist": [
+                "localhost",
+                "127.0.0.1",
+                "192.168.",
+                "10.",
+                "169.254.",
+                "0.0.0.0"
+            ],
+            "max_content_length": 10000
+        },
+        "link_understanding": {
+            "enabled": true,
+            "max_urls": 3,
+            "max_length": 5000
+        },
+        "session": {
+            "compaction": {
+                "enabled": true,
+                "threshold_tokens": 3000,
+                "keep_recent": 3
+            }
+        },
+        "task_board": {
+            "enabled": true,
+            "pin_board": true,
+            "auto_update": true
+        },
+        "reflection": {
+            "enabled": false,
+            "max_reflections": 3,
+            "threshold": 3.5,
+            "auto_enable": false,
+            "keywords": [
+                "important",
+                "report",
+                "design",
+                "plan",
+                "proposal",
+                "analysis"
+            ]
+        },
+        "planner": {
+            "enabled": false,
+            "auto_detect": true,
+            "max_steps": 10
+        }
+    },
+    "mcpServers": {
+        "denrei": {
+            "command": "python3",
+            "args": [
+                "scripts/denrei-mcp-server.py"
+            ]
+        },
+        "memory-search": {
+            "command": "python3",
+            "args": [
+                "scripts/memory_search_server.py"
+            ]
+        },
+        "web-tools": {
+            "command": "python3",
+            "args": [
+                "scripts/web-tools-mcp-server.py"
+            ]
+        },
+        "xai-search": {
+            "command": "python3",
+            "args": [
+                "scripts/xai-search-mcp-server.py"
+            ]
+        },
+        "browser-v2": {
+            "command": "python3",
+            "args": [
+                "scripts/browser-mcp-server.py"
+            ]
+        }
+    }
+}

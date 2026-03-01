@@ -1,0 +1,31 @@
+# Credentials and secrets
+.env
+*.pyc
+__pycache__/
+config/config.json
+config/allowed_domains.txt
+
+# Browser and session data
+browser-cookies/
+logs/
+data/applied_jobs.json
+*.log
+
+# Local config
+.nyancobot/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.bak
+
+# OS
+.DS_Store
+Thumbs.db

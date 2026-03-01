@@ -1,0 +1,11 @@
+# nyancobot browser: allowed domains
+# One domain per line. Subdomains are automatically allowed.
+# e.g. "note.com" also allows "www.note.com", "api.note.com" etc.
+# Lines starting with # are comments. Empty lines are ignored.
+
+# Example domains - customize for your use case
+example.com
+httpbin.org
+github.com
+wikipedia.org
+google.com

@@ -1,0 +1,8 @@
+# nyancobot browser permission level
+# 0=READ_ONLY   - Can only open URLs and read page content
+# 1=TEST_WRITE  - Can click/type on test domains only (example.com, httpbin.org)
+# 2=BROWSER_AUTO - Full browser automation on allowed domains
+# 3=FULL        - All actions including upload
+#
+# Default: 0 (safest)
+0
