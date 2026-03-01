@@ -1,4 +1,4 @@
-🌍 **English** | [日本語](README_ja.md) | [中文](README_zh.md) | [한국어](README_ko.md) | [Español](README_es.md) | [Français](README_fr.md) | [Italiano](README_it.md) | [Português](README_pt.md) | [Deutsch](README_de.md)
+🌍 [English](README.md) | [日本語](README_ja.md) | [中文](README_zh.md) | [한국어](README_ko.md) | [Español](README_es.md) | [Français](README_fr.md) | **Italiano** | [Português](README_pt.md) | [Deutsch](README_de.md)
 
 # nyancobot
 
@@ -15,7 +15,7 @@
                 (_|   |_)
 ```
 
-> **Secure, production-ready AI agent framework** — A hardened fork of [nanobot](https://github.com/HKUDS/nanobot) with enterprise-grade security, multi-agent collaboration, and advanced automation.
+> **Framework per agenti IA sicuro e pronto per la produzione** — Un fork rafforzato di [nanobot](https://github.com/HKUDS/nanobot) con sicurezza di livello enterprise, collaborazione multi-agente e automazione avanzata.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
@@ -23,120 +23,120 @@
 
 ---
 
-## 🎯 What is nyancobot?
+## 🎯 Cos'è nyancobot?
 
-**nyancobot** is an open-source AI agent framework built on top of [nanobot](https://github.com/HKUDS/nanobot), enhanced with:
+**nyancobot** è un framework open-source per agenti IA costruito su [nanobot](https://github.com/HKUDS/nanobot), potenziato con:
 
-- **🔒 Production-grade security** (SSRF prevention, 4-tier permissions, audit logging)
-- **🤝 Multi-agent orchestration** (tmux-based messaging, state detection, anti-loop protection)
-- **🌐 Advanced browser automation** (Playwright + Vision + secure file handling)
-- **📝 Content automation** (repurpose, quality validation, YouTube transcripts)
-- **🚀 LLM provider resilience** (failover chains, Ollama direct API, Qwen3.5 fix)
+- **🔒 Sicurezza di livello produzione** (prevenzione SSRF, permessi a 4 livelli, registrazione audit)
+- **🤝 Orchestrazione multi-agente** (messaggistica basata su tmux, rilevamento dello stato, protezione anti-loop)
+- **🌐 Automazione browser avanzata** (Playwright + Vision + gestione sicura dei file)
+- **📝 Automazione dei contenuti** (riadattamento, validazione qualità, trascrizioni YouTube)
+- **🚀 Resilienza dei provider LLM** (catene di failover, API diretta Ollama, fix per Qwen3.5)
 
-**Why nyancobot?**
-nanobot is a brilliant lightweight foundation (~4,000 lines), but production deployments require hardening. nyancobot adds ~7,000 lines of security, reliability, and automation features while maintaining the elegance of the original.
-
----
-
-## ✨ Key Features
-
-### 🔒 Security Hardening (Biggest Differentiator)
-
-| Feature | nanobot | nyancobot |
-|---------|---------|-----------|
-| SSRF Prevention | ❌ | ✅ Domain whitelist + local IP blocking |
-| Permission Levels | ❌ | ✅ 4-tier system (READ_ONLY → FULL) |
-| Dangerous Actions | ❌ | ✅ Auto-refuse delete/purchase/payment/admin |
-| Path Traversal | ❌ | ✅ Sanitized filenames + path validation |
-| Command Execution | Basic deny | ✅ Allowed dirs + audit logs + `~` expansion fix |
-| Cookie Security | ❌ | ✅ Persistent storage + domain separation + 0o600 perms |
-
-### 🤝 Multi-Agent Collaboration
-
-- **tmux-based messaging**: `send-keys` with delivery confirmation & retry
-- **Anti-loop protection**: MD5 hashing + 10-second throttle
-- **State detection**: Compacting/thinking/idle awareness
-- **Communication logging**: All messages to dedicated audit channel
-- **Custom MCP servers**: 5 specialized servers (denrei, browser, vision, memory, web-tools)
-
-### 🌐 Browser Automation
-
-- **AX Tree support**: Full accessibility tree via Chrome DevTools Protocol
-- **Vision integration**: Screenshot → LLM analysis → next action
-- **Secure file upload**: Path validation + 20MB limit
-- **Job extraction**: CrowdWorks/Lancers scraping with keyword filtering & deduplication
-
-### 📝 Content Automation
-
-- **Content repurpose**: 1 text → X/note/Instagram/SEO blog auto-conversion
-- **Quality validation**: Platform-specific checks + NG word detection + auto-fix
-- **YouTube transcripts**: Multi-language, 50KB limit, flexible URL formats
-
-### 🚀 LLM Provider Improvements
-
-- **Qwen3.5 thinking fix**: Direct Ollama native API bypass (`think:false`)
-- **Failover chains**: Retry + `fallback_providers`
-- **Error classification**: Rate limit/timeout/auth/server error detection
-- **Path expansion fix**: Properly handle `~` in config paths
-
-### ⚙️ Operation Automation
-
-- **Scheduled reports**: Morning/evening summaries + anomaly detection
-- **Job patrol**: Nightly crawling + application templates
-- **Health checks**: 3-hour error monitoring via cron
+**Perché nyancobot?**
+nanobot è una base leggera e brillante (~4.000 righe), ma i deployment in produzione richiedono un rafforzamento. nyancobot aggiunge ~7.000 righe di funzionalità di sicurezza, affidabilità e automazione mantenendo l'eleganza dell'originale.
 
 ---
 
-## 🚀 Quick Start
+## ✨ Funzionalità Principali
 
-### Prerequisites
+### 🔒 Rafforzamento della Sicurezza (Principale Differenziatore)
+
+| Funzionalità | nanobot | nyancobot |
+|--------------|---------|-----------|
+| Prevenzione SSRF | ❌ | ✅ Whitelist domini + blocco IP locali |
+| Livelli di Permesso | ❌ | ✅ Sistema a 4 livelli (READ_ONLY → FULL) |
+| Azioni Pericolose | ❌ | ✅ Rifiuto automatico eliminazione/acquisto/pagamento/admin |
+| Path Traversal | ❌ | ✅ Nomi file sanitizzati + validazione percorso |
+| Esecuzione Comandi | Blocco base | ✅ Directory consentite + log di audit + fix espansione `~` |
+| Sicurezza Cookie | ❌ | ✅ Archiviazione persistente + separazione domini + permessi 0o600 |
+
+### 🤝 Collaborazione Multi-Agente
+
+- **Messaggistica basata su tmux**: `send-keys` con conferma di consegna e retry
+- **Protezione anti-loop**: Hashing MD5 + throttle di 10 secondi
+- **Rilevamento dello stato**: Consapevolezza degli stati compacting/thinking/idle
+- **Registrazione comunicazioni**: Tutti i messaggi su canale di audit dedicato
+- **Server MCP personalizzati**: 5 server specializzati (denrei, browser, vision, memory, web-tools)
+
+### 🌐 Automazione Browser
+
+- **Supporto AX Tree**: Albero di accessibilità completo tramite Chrome DevTools Protocol
+- **Integrazione Vision**: Screenshot → analisi LLM → azione successiva
+- **Upload file sicuro**: Validazione percorso + limite 20MB
+- **Estrazione offerte di lavoro**: Scraping CrowdWorks/Lancers con filtro per parole chiave e deduplicazione
+
+### 📝 Automazione dei Contenuti
+
+- **Riadattamento contenuti**: 1 testo → conversione automatica X/note/Instagram/blog SEO
+- **Validazione qualità**: Controlli specifici per piattaforma + rilevamento parole NG + correzione automatica
+- **Trascrizioni YouTube**: Multi-lingua, limite 50KB, formati URL flessibili
+
+### 🚀 Miglioramenti Provider LLM
+
+- **Fix thinking Qwen3.5**: Bypass diretto API nativa Ollama (`think:false`)
+- **Catene di failover**: Retry + `fallback_providers`
+- **Classificazione errori**: Rilevamento rate limit/timeout/auth/errore server
+- **Fix espansione percorso**: Gestione corretta di `~` nei percorsi di configurazione
+
+### ⚙️ Automazione Operativa
+
+- **Report programmati**: Riepiloghi mattutini/serali + rilevamento anomalie
+- **Pattuglia offerte di lavoro**: Crawling notturno + template per candidature
+- **Controlli di integrità**: Monitoraggio errori ogni 3 ore tramite cron
+
+---
+
+## 🚀 Guida Rapida
+
+### Prerequisiti
 
 - Python 3.10+
-- Playwright browser binaries
+- Binary di browser Playwright
 
-### Installation
+### Installazione
 
 ```bash
-# Install from PyPI (when published)
+# Installa da PyPI (quando pubblicato)
 pip install nyancobot
 
-# Or install from source
+# Oppure installa dal sorgente
 git clone https://github.com/asiokun/nyancobot.git
 cd nyancobot
 pip install -e .
 
-# Install Playwright browsers
+# Installa i browser Playwright
 playwright install chromium
 ```
 
-### Basic Setup
+### Configurazione Base
 
-1. **Create configuration file**
+1. **Crea il file di configurazione**
 
 ```bash
 mkdir -p ~/.nyancobot/config
 cp config.example.json ~/.nyancobot/config/config.json
 ```
 
-2. **Set environment variables**
+2. **Imposta le variabili d'ambiente**
 
 ```bash
 export OPENAI_API_KEY="YOUR_API_KEY"
-export ANTHROPIC_API_KEY="YOUR_API_KEY"  # Optional
-export OLLAMA_BASE_URL="http://localhost:11434"  # Optional
+export ANTHROPIC_API_KEY="YOUR_API_KEY"  # Opzionale
+export OLLAMA_BASE_URL="http://localhost:11434"  # Opzionale
 ```
 
-3. **Configure browser permission level**
+3. **Configura il livello di permesso del browser**
 
 ```bash
-# Level 0: READ_ONLY (safe)
-# Level 1: TEST_WRITE (test domains only)
-# Level 2: BROWSER_AUTO (browser automation)
-# Level 3: FULL (all actions)
+# Livello 0: READ_ONLY (sicuro)
+# Livello 1: TEST_WRITE (solo domini di test)
+# Livello 2: BROWSER_AUTO (automazione browser)
+# Livello 3: FULL (tutte le azioni)
 echo "2" > ~/.nyancobot/config/permission_level.txt
 ```
 
-4. **Set allowed domains** (for SSRF prevention)
+4. **Imposta i domini consentiti** (per la prevenzione SSRF)
 
 ```bash
 cat > ~/.nyancobot/config/allowed_domains.txt <<EOF
@@ -147,7 +147,7 @@ lancers.jp
 EOF
 ```
 
-5. **Run nyancobot**
+5. **Avvia nyancobot**
 
 ```bash
 nyancobot
@@ -155,9 +155,9 @@ nyancobot
 
 ---
 
-## ⚙️ Configuration
+## ⚙️ Configurazione
 
-### config.json Example
+### Esempio config.json
 
 ```json
 {
@@ -191,19 +191,19 @@ nyancobot
 }
 ```
 
-### Environment Variables
+### Variabili d'Ambiente
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `OPENAI_API_KEY` | OpenAI API key (required) | - |
-| `ANTHROPIC_API_KEY` | Anthropic API key (optional) | - |
-| `OLLAMA_BASE_URL` | Ollama server URL (optional) | `http://localhost:11434` |
-| `NYANCOBOT_CONFIG` | Path to config.json | `~/.nyancobot/config/config.json` |
-| `NYANCOBOT_LOG_LEVEL` | Logging level | `INFO` |
+| Variabile | Descrizione | Default |
+|-----------|-------------|---------|
+| `OPENAI_API_KEY` | Chiave API OpenAI (obbligatoria) | - |
+| `ANTHROPIC_API_KEY` | Chiave API Anthropic (opzionale) | - |
+| `OLLAMA_BASE_URL` | URL del server Ollama (opzionale) | `http://localhost:11434` |
+| `NYANCOBOT_CONFIG` | Percorso del config.json | `~/.nyancobot/config/config.json` |
+| `NYANCOBOT_LOG_LEVEL` | Livello di logging | `INFO` |
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ Architettura
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -250,7 +250,7 @@ nyancobot
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### Multi-Agent Communication Flow
+### Flusso di Comunicazione Multi-Agente
 
 ```
 Agent A                    Agent B
@@ -272,57 +272,57 @@ Agent A                    Agent B
 
 ---
 
-## 📚 Attribution
+## 📚 Attribuzioni
 
-nyancobot is a fork of [nanobot](https://github.com/HKUDS/nanobot) by HKUDS.
+nyancobot è un fork di [nanobot](https://github.com/HKUDS/nanobot) di HKUDS.
 
-We are deeply grateful to the original nanobot team for their elegant and lightweight foundation.
+Siamo profondamente grati al team originale di nanobot per la loro base elegante e leggera.
 
-See [ATTRIBUTION.md](ATTRIBUTION.md) for detailed credits and modifications.
-
----
-
-## 📄 License
-
-MIT License - see [LICENSE](LICENSE) for details.
-
-**Dual Copyright:**
-- Original nanobot: Copyright (c) 2025 nanobot contributors
-- nyancobot modifications: Copyright (c) 2026 nyancobot contributors
+Consulta [ATTRIBUTION.md](ATTRIBUTION.md) per crediti dettagliati e modifiche.
 
 ---
 
-## 🤝 Contributing
+## 📄 Licenza
 
-Contributions are welcome! Please:
+Licenza MIT - consulta [LICENSE](LICENSE) per i dettagli.
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-**Security Issues:** Please report security vulnerabilities via GitHub Security Advisories (not public issues).
+**Doppio Copyright:**
+- nanobot originale: Copyright (c) 2025 nanobot contributors
+- Modifiche nyancobot: Copyright (c) 2026 nyancobot contributors
 
 ---
 
-## 🔗 Links
+## 🤝 Contribuire
 
-- **Original nanobot**: https://github.com/HKUDS/nanobot
-- **Documentation**: [Coming soon]
-- **Issues**: https://github.com/asiokun/nyancobot/issues
-- **Discussions**: https://github.com/asiokun/nyancobot/discussions
+I contributi sono benvenuti! Per favore:
 
----
+1. Fai un fork del repository
+2. Crea un branch per la funzionalità (`git checkout -b feature/amazing-feature`)
+3. Effettua il commit delle modifiche (`git commit -m 'Add amazing feature'`)
+4. Fai push sul branch (`git push origin feature/amazing-feature`)
+5. Apri una Pull Request
 
-## 🙏 Acknowledgments
-
-- **HKUDS** for the original nanobot framework
-- **Playwright** team for robust browser automation
-- **litellm** for unified LLM provider interface
-- **FastMCP** for MCP server infrastructure
-- All contributors to the nyancobot project
+**Problemi di Sicurezza:** Segnala le vulnerabilità di sicurezza tramite GitHub Security Advisories (non tramite issue pubbliche).
 
 ---
 
-**Made with ❤️ by the nyancobot community**
+## 🔗 Link
+
+- **nanobot originale**: https://github.com/HKUDS/nanobot
+- **Documentazione**: [In arrivo]
+- **Issue**: https://github.com/asiokun/nyancobot/issues
+- **Discussioni**: https://github.com/asiokun/nyancobot/discussions
+
+---
+
+## 🙏 Ringraziamenti
+
+- **HKUDS** per il framework originale nanobot
+- Il team di **Playwright** per la robusta automazione browser
+- **litellm** per l'interfaccia unificata dei provider LLM
+- **FastMCP** per l'infrastruttura dei server MCP
+- Tutti i contributori al progetto nyancobot
+
+---
+
+**Realizzato con ❤️ dalla community di nyancobot**
