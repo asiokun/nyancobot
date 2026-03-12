@@ -2,6 +2,7 @@
 
 import asyncio
 import json
+import os
 import re
 import time
 from pathlib import Path
@@ -32,6 +33,13 @@ from nyancobot.agent.safety.budget import BudgetMeter
 from nyancobot.agent.reflector import Reflector, ReflectionConfig
 from nyancobot.agent.planner import Planner, Plan, PlanStep
 from nyancobot.agent.task_state import TaskStateManager
+from nyancobot.agent.evaluator import (
+    create_evaluator, ResponseEvaluator, FTDataCollector,
+    should_search_by_keywords, EvaluationResult,
+)
+from nyancobot.agent.multi_perspective import (
+    MultiPerspectiveEvaluator, should_suggest_think,
+)
 from nyancobot.session.manager import SessionManager
 
 
@@ -90,6 +98,7 @@ class AgentLoop:
         tiered_memory_config: dict | None = None,  # tiered-memory: Tiered Memory config
         rag_config: dict | None = None,  # rag-pipeline: RAG Pipeline config
         a2a_config: dict | None = None,  # a2a-protocol: A2A Protocol config
+        evaluator_config: dict | None = None,  # v0.3.0: Evaluator pipeline config
     ):
         from nyancobot.config.schema import ExecToolConfig, SafetyConfig
         from nyancobot.cron.service import CronService
@@ -243,6 +252,35 @@ class AgentLoop:
             logger.info("A2A Protocol enabled: db=%s, webhook=%s",
                         self._a2a_config.get("task_db_path", "~/.nyancobot/tasks.db"),
                         "on" if webhook.enabled else "off")
+
+        # v0.3.0: Evaluator pipeline initialization
+        # Auto-load evaluator config from config.json if not explicitly passed
+        if not evaluator_config:
+            try:
+                _cfg_path = Path(os.path.expanduser("~/.nyancobot/config.json"))
+                if _cfg_path.exists():
+                    with open(_cfg_path) as _f:
+                        _raw_cfg = json.load(_f)
+                    evaluator_config = _raw_cfg.get("evaluator", {})
+            except Exception as _e:
+                logger.warning(f"Failed to load evaluator config from config.json: {_e}")
+        self._evaluator_config = evaluator_config or {}
+        self._evaluator: ResponseEvaluator | None = None
+        self._ft_collector: FTDataCollector | None = None
+        self._multi_perspective: MultiPerspectiveEvaluator | None = None
+        if self._evaluator_config.get("enabled", False):
+            self._evaluator = create_evaluator(self._evaluator_config)
+            self._ft_collector = FTDataCollector()
+            if self._evaluator:
+                logger.info(
+                    "Evaluator enabled: type=%s, threshold=%d",
+                    self._evaluator_config.get("type", "none"),
+                    self._evaluator_config.get("threshold", 3),
+                )
+        # /think multi-perspective (always init if api_keys present)
+        if self._evaluator_config.get("api_keys"):
+            self._multi_perspective = MultiPerspectiveEvaluator(self._evaluator_config)
+            logger.info("MultiPerspective evaluator initialized")
 
         self._running = False
         self._last_notification_time: float = 0.0  # proactive-notify: proactive notification throttle
@@ -536,6 +574,26 @@ class AgentLoop:
                     channel=msg.channel,
                     chat_id=msg.chat_id,
                     content=_response_text,
+                    reply_to=msg,
+                    message_type=_outbound_message_type,
+                )
+
+        # === Pre-LLM: /think multi-perspective evaluation ===
+        if self._multi_perspective and user_msg_stripped.startswith("/think"):
+            _think_idea = user_msg_stripped[len("/think"):].strip()
+            if _think_idea:
+                logger.info(f"/think command: evaluating idea ({len(_think_idea)} chars)")
+                try:
+                    _think_result = await self._multi_perspective.evaluate(_think_idea)
+                except Exception as e:
+                    _think_result = f"多角評価中にエラーが発生しました: {e}"
+                session.add_message("user", msg.content)
+                session.add_message("assistant", _think_result)
+                self.sessions.save(session)
+                return OutboundMessage(
+                    channel=msg.channel,
+                    chat_id=msg.chat_id,
+                    content=_think_result,
                     reply_to=msg,
                     message_type=_outbound_message_type,
                 )
@@ -846,6 +904,82 @@ class AgentLoop:
                     )
             except Exception as e:
                 logger.error(f"Reflection failed: {e}")
+
+        # v0.3.0: Evaluator pipeline (post-reflector)
+        if final_content and self._evaluator:
+            try:
+                _eval_threshold = self._evaluator_config.get("threshold", 3)
+                _keyword_search = should_search_by_keywords(msg.content)
+                _eval_result: EvaluationResult | None = None
+
+                if _keyword_search:
+                    # Keywords suggest fresh data needed - search immediately
+                    logger.info("Evaluator: keyword-triggered search for question")
+                    _eval_result = EvaluationResult(
+                        score=2, needs_search=True,
+                        search_queries=[msg.content[:100]],
+                        evaluator_type="keyword",
+                    )
+                else:
+                    _eval_result = await self._evaluator.evaluate(msg.content, final_content)
+                    logger.info(
+                        f"Evaluator: score={_eval_result.score}, needs_search={_eval_result.needs_search}, "
+                        f"type={_eval_result.evaluator_type}"
+                    )
+
+                # If low score or search needed, augment with web search
+                _search_text = None
+                if _eval_result and (_eval_result.score <= _eval_threshold or _eval_result.needs_search):
+                    _search_queries = _eval_result.search_queries or [msg.content[:100]]
+                    _search_results_parts = []
+                    _web_search_tool = self.tools.get("web_search")
+                    if _web_search_tool:
+                        for sq in _search_queries[:2]:  # max 2 queries
+                            try:
+                                sr = await _web_search_tool.execute(query=sq, count=3)
+                                _search_results_parts.append(sr)
+                            except Exception as se:
+                                logger.warning(f"Evaluator search failed for '{sq}': {se}")
+                    _search_text = "\n".join(_search_results_parts) if _search_results_parts else None
+
+                    if _search_text:
+                        # Re-generate with search context
+                        _augmented_messages = list(messages)
+                        _augmented_messages.append({
+                            "role": "user",
+                            "content": (
+                                f"前回の回答に事実誤認の可能性があります。以下の最新情報を踏まえて回答を改善してください:\n\n"
+                                f"## 検索結果\n{_search_text}\n\n"
+                                f"## 元の質問\n{msg.content}\n\n"
+                                f"改善した回答のみを出力してください。"
+                            ),
+                        })
+                        _regen_response = await self.provider.chat(
+                            messages=_augmented_messages,
+                            model=effective_model,
+                        )
+                        if _regen_response.content:
+                            final_content = _regen_response.content
+                            logger.info("Evaluator: regenerated response with search augmentation")
+
+                # Save FT data
+                if self._ft_collector and _eval_result:
+                    self._ft_collector.save(
+                        question=msg.content,
+                        initial_answer=final_content,
+                        evaluation=_eval_result,
+                        search_results=_search_text,
+                        final_answer=final_content,
+                        model=effective_model,
+                    )
+            except Exception as e:
+                logger.error(f"Evaluator pipeline failed (non-fatal): {e}")
+
+        # v0.3.0: /think suggestion (if suggest_think enabled)
+        if (final_content and self._multi_perspective
+                and self._evaluator_config.get("suggest_think", False)
+                and should_suggest_think(msg.content)):
+            final_content += "\n\n💡 多角評価しますか？ `/think` で実行できます"
 
         # Log response preview
         preview = final_content[:120] + "..." if len(final_content) > 120 else final_content
