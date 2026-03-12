@@ -198,16 +198,16 @@ class BrowserTool(Tool):
 
         SCREENSHOT_DIR.mkdir(parents=True, exist_ok=True)
 
+        from nyancobot.agent.tools.browser_stealth import create_stealth_browser
+
         self._pw = await async_playwright().start()
-        self._browser = await self._pw.chromium.launch(headless=True)
-        self._context = await self._browser.new_context(
-            accept_downloads=False,
-            viewport={"width": 1280, "height": 720},
-            user_agent=(
-                "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_7_2) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) "
-                "Chrome/131.0.0.0 Safari/537.36"
-            ),
+        self._context = await create_stealth_browser(
+            self._pw,
+            headless=True,
+            context_options={
+                "accept_downloads": False,
+                "viewport": {"width": 1280, "height": 720},
+            },
         )
         self._page = await self._context.new_page()
 

@@ -1,22 +1,35 @@
 {
     "channels": {
+        "slack": {
+            "enabled": false,
+            "token": "xoxb-YOUR-SLACK-BOT-TOKEN",
+            "app_token": "xapp-YOUR-SLACK-APP-TOKEN",
+            "signing_secret": "YOUR_SIGNING_SECRET"
+        },
+        "discord": {
+            "enabled": false,
+            "token": "YOUR_DISCORD_BOT_TOKEN"
+        },
+        "line": {
+            "enabled": false,
+            "channel_access_token": "YOUR_LINE_CHANNEL_ACCESS_TOKEN",
+            "channel_secret": "YOUR_LINE_CHANNEL_SECRET",
+            "webhook_path": "/webhook/line",
+            "allow_from": []
+        },
         "whatsapp": {
             "enabled": false,
-            "bridgeUrl": "ws://localhost:3001",
-            "allowFrom": []
+            "token": "YOUR_WHATSAPP_TOKEN",
+            "phone_number_id": "YOUR_PHONE_NUMBER_ID",
+            "verify_token": "YOUR_VERIFY_TOKEN",
+            "webhook_path": "/webhook/whatsapp",
+            "allow_from": []
         },
         "telegram": {
             "enabled": false,
             "token": "YOUR_TELEGRAM_BOT_TOKEN",
             "allowFrom": [],
             "proxy": null
-        },
-        "discord": {
-            "enabled": false,
-            "token": "YOUR_DISCORD_BOT_TOKEN",
-            "allowFrom": [],
-            "gatewayUrl": "wss://gateway.discord.gg/?v=10&encoding=json",
-            "intents": 37377
         },
         "feishu": {
             "enabled": false,
@@ -25,21 +38,6 @@
             "encryptKey": "YOUR_FEISHU_ENCRYPT_KEY",
             "verificationToken": "YOUR_FEISHU_VERIFICATION_TOKEN",
             "allowFrom": []
-        },
-        "slack": {
-            "enabled": false,
-            "token": "YOUR_SLACK_BOT_TOKEN",
-            "signing_secret": "YOUR_SLACK_SIGNING_SECRET",
-            "allow_from": [],
-            "port": 8080,
-            "typing_indicator": false,
-            "typing_emoji": "eyes",
-            "channel_routing": {
-                "enabled": true,
-                "notification_channel": "YOUR_NOTIFICATION_CHANNEL_ID",
-                "log_channel": "YOUR_LOG_CHANNEL_ID",
-                "_note": "Set via env var NYANCOBOT_NOTIFICATION_CHANNEL or channel name lookup"
-            }
         }
     },
     "providers": {
@@ -96,8 +94,8 @@
         }
     },
     "gateway": {
-        "host": "127.0.0.1",
-        "port": 8080
+        "port": 8080,
+        "host": "0.0.0.0"
     },
     "tools": {
         "web": {

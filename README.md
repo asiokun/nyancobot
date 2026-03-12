@@ -87,6 +87,59 @@ nanobot is a brilliant lightweight foundation (~4,000 lines), but production dep
 
 ---
 
+## 💬 Messaging Integrations
+
+[![Slack](https://img.shields.io/badge/Slack-4A154B?logo=slack&logoColor=white)](https://slack.com)
+[![Discord](https://img.shields.io/badge/Discord-5865F2?logo=discord&logoColor=white)](https://discord.com)
+[![LINE](https://img.shields.io/badge/LINE-00C300?logo=line&logoColor=white)](https://line.me)
+[![WhatsApp](https://img.shields.io/badge/WhatsApp-25D366?logo=whatsapp&logoColor=white)](https://whatsapp.com)
+
+nyancobot supports multiple messaging platforms out of the box. Install only what you need:
+
+```bash
+# Install specific platform
+pip install nyancobot[slack]     # Slack only
+pip install nyancobot[discord]   # Discord only
+pip install nyancobot[line]      # LINE only
+pip install nyancobot[whatsapp]  # WhatsApp only
+
+# Install all messaging platforms
+pip install nyancobot[all-channels]
+```
+
+### Quick Setup
+
+**Slack**: Get bot token from [Slack API](https://api.slack.com/apps) → Enable Socket Mode → Copy `xoxb-` and `xapp-` tokens.
+
+**Discord**: Create bot at [Discord Developer Portal](https://discord.com/developers/applications) → Copy token → Enable Message Content Intent.
+
+**LINE**: Create channel at [LINE Developers](https://developers.line.biz/) → Get Channel Access Token and Secret → Set webhook URL.
+
+**WhatsApp**: Register at [Meta for Developers](https://developers.facebook.com/) → Get token and Phone Number ID → Configure webhook.
+
+### Configuration
+
+Update `~/.nyancobot/config/config.json`:
+
+```json
+{
+  "channels": {
+    "slack": {
+      "enabled": true,
+      "bot_token": "xoxb-YOUR-TOKEN",
+      "app_token": "xapp-YOUR-TOKEN",
+      "signing_secret": "YOUR_SECRET"
+    },
+    "discord": {
+      "enabled": true,
+      "token": "YOUR_DISCORD_BOT_TOKEN"
+    }
+  }
+}
+```
+
+---
+
 ## 🚀 Quick Start
 
 ### Prerequisites

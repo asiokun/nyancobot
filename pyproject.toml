@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nyancobot"
-version = "0.1.0"
+version = "0.2.0"
 description = "Secure, production-ready AI agent framework forked from nanobot with enhanced security, multi-agent collaboration, and automation features"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -45,6 +45,12 @@ dev = [
     "ruff>=0.1.0",
     "mypy>=1.6.0",
 ]
+slack = ["slack-bolt>=1.18"]
+discord = ["discord.py>=2.3"]
+line = ["line-bot-sdk>=3.0"]
+whatsapp = ["httpx>=0.27"]
+webhook = ["fastapi>=0.110", "uvicorn>=0.29"]
+all-channels = ["slack-bolt>=1.18", "discord.py>=2.3", "line-bot-sdk>=3.0", "httpx>=0.27", "fastapi>=0.110", "uvicorn>=0.29"]
 
 [project.urls]
 Homepage = "https://github.com/asiokun/nyancobot"
@@ -53,10 +59,11 @@ Issues = "https://github.com/asiokun/nyancobot/issues"
 Documentation = "https://github.com/asiokun/nyancobot#readme"
 
 [tool.setuptools]
-packages = ["nyancobot"]
+packages = ["nyancobot", "nyancobot.channels", "nyancobot.agent", "nyancobot.agent.tools", "nyancobot.agent.tools.browser_stealth", "nyancobot.providers"]
 
 [tool.setuptools.package-data]
 nyancobot = ["py.typed"]
+"nyancobot.agent.tools.browser_stealth" = ["stealth.js"]
 
 [tool.black]
 line-length = 100
